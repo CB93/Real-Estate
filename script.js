@@ -1,30 +1,12 @@
 // ---------- Header scroll state ----------
 (function () {
   const header = document.getElementById('siteHeader');
-  if (!header) return;
+  if (!header || header.classList.contains('is-solid')) return;
   const onScroll = () => {
-    if (window.scrollY > 40) header.classList.add('is-scrolled');
-    else header.classList.remove('is-scrolled');
+    header.classList.toggle('is-scrolled', window.scrollY > 40);
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
-})();
-
-// ---------- Mobile nav toggle ----------
-(function () {
-  const toggle = document.getElementById('navToggle');
-  const nav = document.getElementById('siteNav');
-  if (!toggle || !nav) return;
-  toggle.addEventListener('click', () => {
-    const open = nav.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
-  nav.querySelectorAll('a').forEach((a) => {
-    a.addEventListener('click', () => {
-      nav.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-    });
-  });
 })();
 
 // ---------- Gallery filter ----------
@@ -71,9 +53,10 @@
     if (!visibleItems.length) return;
     currentIndex = (index + visibleItems.length) % visibleItems.length;
     const item = visibleItems[currentIndex];
+    const caption = item.dataset.caption || '';
     lbImage.src = item.getAttribute('href');
-    lbImage.alt = item.dataset.caption || '';
-    lbCap.textContent = item.dataset.caption || '';
+    lbImage.alt = caption;
+    lbCap.innerHTML = caption + ' <span class="counter">' + (currentIndex + 1) + ' / ' + visibleItems.length + '</span>';
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -87,8 +70,7 @@
     const item = e.target.closest('.gallery-item');
     if (!item) return;
     e.preventDefault();
-    const items = getVisibleItems();
-    openAt(items.indexOf(item));
+    openAt(getVisibleItems().indexOf(item));
   });
 
   lbClose.addEventListener('click', close);
