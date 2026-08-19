@@ -29,11 +29,11 @@
   });
 })();
 
-// ---------- Lightbox ----------
+// ---------- Lightbox (any [data-lightbox] group) ----------
 (function () {
-  const grid = document.getElementById('galleryGrid');
+  const groups = Array.from(document.querySelectorAll('[data-lightbox]'));
   const lightbox = document.getElementById('lightbox');
-  if (!grid || !lightbox) return;
+  if (!groups.length || !lightbox) return;
 
   const lbImage = document.getElementById('lbImage');
   const lbCap = document.getElementById('lbCap');
@@ -41,22 +41,29 @@
   const lbPrev = document.getElementById('lbPrev');
   const lbNext = document.getElementById('lbNext');
 
-  let visibleItems = [];
+  let items = [];
   let currentIndex = 0;
 
-  function getVisibleItems() {
-    return Array.from(grid.querySelectorAll('.gallery-item:not(.is-hidden)'));
+  function visibleIn(group) {
+    return Array.from(group.querySelectorAll('a[data-caption]')).filter(
+      (a) => !a.classList.contains('is-hidden')
+    );
   }
 
   function openAt(index) {
-    visibleItems = getVisibleItems();
-    if (!visibleItems.length) return;
-    currentIndex = (index + visibleItems.length) % visibleItems.length;
-    const item = visibleItems[currentIndex];
+    if (!items.length) return;
+    currentIndex = (index + items.length) % items.length;
+    const item = items[currentIndex];
     const caption = item.dataset.caption || '';
     lbImage.src = item.getAttribute('href');
     lbImage.alt = caption;
-    lbCap.innerHTML = caption + ' <span class="counter">' + (currentIndex + 1) + ' / ' + visibleItems.length + '</span>';
+    lbCap.innerHTML =
+      caption +
+      (items.length > 1
+        ? ' <span class="counter">' + (currentIndex + 1) + ' / ' + items.length + '</span>'
+        : '');
+    lbPrev.style.display = items.length > 1 ? '' : 'none';
+    lbNext.style.display = items.length > 1 ? '' : 'none';
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -66,11 +73,14 @@
     document.body.style.overflow = '';
   }
 
-  grid.addEventListener('click', (e) => {
-    const item = e.target.closest('.gallery-item');
-    if (!item) return;
-    e.preventDefault();
-    openAt(getVisibleItems().indexOf(item));
+  groups.forEach((group) => {
+    group.addEventListener('click', (e) => {
+      const item = e.target.closest('a[data-caption]');
+      if (!item || !group.contains(item)) return;
+      e.preventDefault();
+      items = group.dataset.lightbox === 'single' ? [item] : visibleIn(group);
+      openAt(items.indexOf(item));
+    });
   });
 
   lbClose.addEventListener('click', close);

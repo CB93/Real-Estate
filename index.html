@@ -231,8 +231,12 @@
           <div class="eyebrow">Floor Plans</div>
           <h2>Both levels, laid out</h2>
         </div>
-        <div class="plan-grid">
-          <a href="images/main-floor-plan.png" class="plan-card">
+        <div class="plan-grid" data-lightbox="single">
+          <a
+            href="images/main-floor-plan.png"
+            class="plan-card"
+            data-caption="Main Level Floor Plan"
+          >
             <div class="sheet">
               <img
                 src="images/main-floor-plan.png"
@@ -244,7 +248,11 @@
               <span>Main Level</span><span>Approx. 2,000 SF</span>
             </div>
           </a>
-          <a href="images/lower-floor-plan.png" class="plan-card">
+          <a
+            href="images/lower-floor-plan.png"
+            class="plan-card"
+            data-caption="Lower Level Floor Plan"
+          >
             <div class="sheet">
               <img
                 src="images/lower-floor-plan.png"
@@ -283,6 +291,16 @@
         </div>
       </div>
     </section>
+
+    <div class="lightbox" id="lightbox">
+      <button class="lightbox-close" id="lbClose" aria-label="Close">
+        Close ✕
+      </button>
+      <button class="lightbox-prev" id="lbPrev" aria-label="Previous">←</button>
+      <img id="lbImage" src="" alt="" />
+      <button class="lightbox-next" id="lbNext" aria-label="Next">→</button>
+      <div class="lightbox-cap" id="lbCap"></div>
+    </div>
 
     <footer class="site-footer">
       <div class="wrap">
