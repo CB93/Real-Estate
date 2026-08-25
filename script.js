@@ -6,11 +6,12 @@
     'error',
     (e) => {
       const img = e.target;
-      if (img.tagName !== 'IMG' || !img.dataset.full || img.dataset.fellBack) return;
+      if (img.tagName !== 'IMG' || !img.dataset.full || img.dataset.fellBack)
+        return;
       img.dataset.fellBack = '1';
       img.src = img.dataset.full;
     },
-    true
+    true,
   );
 })();
 
@@ -21,7 +22,7 @@
   const onScroll = () => {
     header.classList.toggle('is-scrolled', window.scrollY > 40);
   };
-  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('scroll', onScroll, {passive: true});
   onScroll();
 })();
 
@@ -35,7 +36,9 @@
   filters.addEventListener('click', (e) => {
     const btn = e.target.closest('.filter-btn');
     if (!btn) return;
-    filters.querySelectorAll('.filter-btn').forEach((b) => b.classList.remove('active'));
+    filters
+      .querySelectorAll('.filter-btn')
+      .forEach((b) => b.classList.remove('active'));
     btn.classList.add('active');
     const filter = btn.dataset.filter;
     items.forEach((item) => {
@@ -62,7 +65,7 @@
 
   function visibleIn(group) {
     return Array.from(group.querySelectorAll('a[data-caption]')).filter(
-      (a) => !a.classList.contains('is-hidden')
+      (a) => !a.classList.contains('is-hidden'),
     );
   }
 
@@ -77,7 +80,11 @@
     lbCap.innerHTML =
       caption +
       (items.length > 1
-        ? ' <span class="counter">' + (currentIndex + 1) + ' / ' + items.length + '</span>'
+        ? ' <span class="counter">' +
+          (currentIndex + 1) +
+          ' / ' +
+          items.length +
+          '</span>'
         : '');
     lbPrev.style.display = items.length > 1 ? '' : 'none';
     lbNext.style.display = items.length > 1 ? '' : 'none';
